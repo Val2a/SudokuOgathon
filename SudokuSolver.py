@@ -1,3 +1,6 @@
+import DatasetManager
+
+
 def read_sudoku_board(file_path):
     board = []
     sudoku_file = open(file_path, "r")
@@ -9,11 +12,16 @@ def read_sudoku_board(file_path):
     sudoku_file.close()
     return board
 
-def print_sudoku(sudoku):
-    for row in sudoku:
-        print()
+def sudokuToStr(sudoku_board):
+    str_sudoku = ""
+    for row in sudoku_board:
         for cell in row:
-            print(" " + str(cell), end="")
+            if cell != row[0]:
+                str_sudoku += " "
+            str_sudoku += str(cell)
+        if row != sudoku_board[len(sudoku_board)-1]:
+            str_sudoku += "\n"
+    return str_sudoku
 
 def is_num_valid(board, row, col, num):
     if num in board[row]:
@@ -57,14 +65,11 @@ def solve_sudoku(board):
     # Si ha ido bien, se resuelve
     return True
 
-filePath = "instance_path"
+def resolve_sudoku_file(file_path):
+    sudoku_board = read_sudoku_board(file_path)
+    solve_sudoku(sudoku_board)
+    return sudokuToStr(sudoku_board)
 
-sudoku = read_sudoku_board(filePath)
-
-if solve_sudoku(sudoku):
-    print_sudoku(sudoku)
-else:
-    print("Sudoku not solved")
-
+DatasetManager.resolve_dataset("dataset_path", resolve_sudoku_file)
 
 
